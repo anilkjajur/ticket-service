@@ -13,6 +13,15 @@ public class Venue extends BaseEntity implements Serializable {
     @Column(name = "TOTAL_SEATS", nullable = false)
     private int totalSeats;
 
+    @Column(name = "REMAINING_SEATS", nullable = false)
+    private int remainingSeats;
+
+    @Column(name = "RESERVED_SEATS", nullable = false)
+    private int reservedSeats;
+
+    @Column(name = "ON_HOLD_SEATS", nullable = false)
+    private int onHoldSeats;
+
     @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
     private Set<Seat> seats;
 
@@ -20,11 +29,21 @@ public class Venue extends BaseEntity implements Serializable {
         super();
     }
 
+    @PreUpdate
+    private void preUpdate() {
+        remainingSeats = getAvailableSeats();
+        onHoldSeats = getOnHoldCount();
+        reservedSeats = getReservedCount();
+    }
+
     @PostLoad
     private void postLoad() {
         if (this.seats == null) {
             this.seats = new HashSet<>();
         }
+        remainingSeats = getAvailableSeats();
+        onHoldSeats = getOnHoldCount();
+        reservedSeats = getReservedCount();
     }
 
     public Integer getTotalSeats() {
@@ -48,8 +67,16 @@ public class Venue extends BaseEntity implements Serializable {
         }
     }
 
-    public static VenueBuilder newInstance() {
-        return new VenueBuilder();
+    public int getRemainingSeats() {
+        return remainingSeats;
+    }
+
+    public int getReservedSeats() {
+        return reservedSeats;
+    }
+
+    public int getOnHoldSeats() {
+        return onHoldSeats;
     }
 
     public int getAvailableSeats() {
@@ -63,38 +90,27 @@ public class Venue extends BaseEntity implements Serializable {
                 .intValue();
     }
 
+    private int getOnHoldCount() {
+        return Long.valueOf(this.seats.stream()
+                .filter(Seat::isOnHold)
+                .count())
+                .intValue();
+    }
+
+    private int getReservedCount() {
+        return Long.valueOf(this.seats.stream()
+                .filter(Seat::isReserved)
+                .count())
+                .intValue();
+    }
+
     public void addSeats(Set<Seat> seats) {
         this.seats.addAll(seats);
     }
 
-    private static class VenueBuilder {
-
-        private Integer totalSeats;
-        private Set<Seat> seats;
-
-        VenueBuilder() {
-        }
-
-        public VenueBuilder seats(Set<Seat> seats) {
-            if (seats == null) {
-                this.seats = new HashSet<>();
-            }
-            else {
-                this.seats = seats;
-            }
-            return this;
-        }
-
-        public VenueBuilder totalSeats(Integer numberOfSeats) {
-            this.totalSeats = numberOfSeats;
-            return this;
-        }
-
-        public Venue build() {
-            Venue domain = new Venue();
-            domain.seats = this.seats;
-            domain.totalSeats = this.totalSeats;
-            return domain;
-        }
+    public static Venue newInstance(int totalSeats) {
+        Venue domain = new Venue();
+        domain.totalSeats = totalSeats;
+        return domain;
     }
 }

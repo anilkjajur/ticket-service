@@ -1,6 +1,8 @@
 package com.walmart.ticket.domain;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -26,8 +28,18 @@ public class Customer extends BaseEntity implements Serializable {
     @Column(name = "LAST_NAME", length = 50)
     private String lastName;
 
-    protected Customer() {
+    private Customer() {
         super();
+    }
+
+    @PrePersist
+    private void preCreate() {
+        if (StringUtils.isBlank(firstName)) {
+            firstName = "NOT USED";
+        }
+        if (StringUtils.isBlank(lastName)) {
+            lastName = "NOT USED";
+        }
     }
 
     public Customer(String firstName, String lastName, String customerEmail) {
@@ -36,7 +48,7 @@ public class Customer extends BaseEntity implements Serializable {
         this.customerEmail = customerEmail;
     }
 
-    public Customer(@NotNull @Email @Size(max = 100) String customerEmail) {
+    public Customer(String customerEmail) {
         this.customerEmail = customerEmail;
     }
 

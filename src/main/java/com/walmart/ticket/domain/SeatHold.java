@@ -6,6 +6,8 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Entity
@@ -16,6 +18,9 @@ public class SeatHold extends BaseEntity implements Serializable {
 
     @Column(name = "HOLDING_TIME")
     private Instant holdingTime;
+
+    @Column(name = "NUMBER_OF_SEATS", nullable = false)
+    private int numberOfSeats;
 
     @OneToMany(mappedBy = "seatHold", cascade = CascadeType.ALL)
     private Set<Seat> seats;
@@ -46,6 +51,10 @@ public class SeatHold extends BaseEntity implements Serializable {
         if (seats == null) {
             seats = new HashSet<>();
         }
+    }
+
+    public int getNumberOfSeats() {
+        return numberOfSeats;
     }
 
     public Instant getHoldingTime() {
@@ -88,21 +97,39 @@ public class SeatHold extends BaseEntity implements Serializable {
         this.booking = booking;
     }
 
-    public static SeatHold newInstance(Customer customer, Venue venue) {
+    public static SeatHold newInstance(Customer customer, Venue venue, int holdSeats) {
         SeatHold domain = new SeatHold();
         domain.venue = venue;
         domain.customer = customer;
+        domain.numberOfSeats = holdSeats;
+        domain.seats = createSeatsToHold(holdSeats, venue, domain);
         return domain;
     }
 
-    public void setSeatsOnHold() {
-        this.seats.forEach(Seat::makeOnHold);
+    private static Set<Seat> createSeatsToHold(int holdSeats, Venue venue, SeatHold seatHold) {
+        int availableSeats = venue.getAvailableSeats();
+
+        if (availableSeats < holdSeats) {
+            throw new IllegalStateException("Not enough seats are makeAvailable to hold seats " + holdSeats);
+        }
+
+        Set<Seat> seats = IntStream.range(0, holdSeats)
+                .mapToObj(i -> createSeatsToHold(venue, seatHold))
+                .collect(Collectors.toSet());
+
+        seatHold.addSeats(seats);
+        venue.addSeats(seats);
+        return seats;
     }
 
-    public void setSeatsAsAvailable() {
-        this.seats.forEach(Seat::makeAvailable);
-        this.seats.clear();
+    private static Seat createSeatsToHold(Venue venue, SeatHold seatHold) {
+        return Seat.newInstance()
+                .seatHold(seatHold)
+                .venue(venue)
+                .status(Status.ON_HOLD)
+                .build();
     }
+
 
     public boolean isOnHoldExpired() {
         Instant now = Instant.now().minusSeconds(EXPIRATION_SECONDS);

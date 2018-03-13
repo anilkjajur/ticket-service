@@ -50,35 +50,11 @@ public class TicketServiceImpl implements TicketService {
 
         Customer customer = getOrCreateCustomerForCustomerEmail(customerEmail);
 
-        SeatHold seatHold = SeatHold.newInstance(customer, venue);
-        createSeatsToHold(numSeats, venue, seatHold);
+        SeatHold seatHold = SeatHold.newInstance(customer, venue, numSeats);
+
         seatHoldRepository.save(seatHold);
 
         return seatHold;
-    }
-
-    private Set<Seat> createSeatsToHold(int holdSeats, Venue venue, SeatHold seatHold) {
-        int availableSeats = venue.getAvailableSeats();
-
-        if (availableSeats < holdSeats) {
-            throw new IllegalStateException("Not enough seats are makeAvailable to hold seats " + holdSeats);
-        }
-
-        Set<Seat> seats = IntStream.range(0, holdSeats)
-                .mapToObj(i -> createSeatsToHold(venue, seatHold))
-                .collect(Collectors.toSet());
-
-        seatHold.addSeats(seats);
-        venue.addSeats(seats);
-        return seats;
-    }
-
-    private Seat createSeatsToHold(Venue venue, SeatHold seatHold) {
-        return Seat.newInstance()
-                .seatHold(seatHold)
-                .venue(venue)
-                .status(Status.ON_HOLD)
-                .build();
     }
 
     private Customer getOrCreateCustomerForCustomerEmail(String customerEmail) {
