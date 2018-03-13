@@ -22,7 +22,7 @@ public class Venue extends BaseEntity implements Serializable {
     @Column(name = "ON_HOLD_SEATS", nullable = false)
     private int onHoldSeats;
 
-    @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Seat> seats;
 
     private Venue() {
@@ -106,11 +106,17 @@ public class Venue extends BaseEntity implements Serializable {
 
     public void addSeats(Set<Seat> seats) {
         this.seats.addAll(seats);
+        preUpdate();
     }
 
     public static Venue newInstance(int totalSeats) {
         Venue domain = new Venue();
         domain.totalSeats = totalSeats;
         return domain;
+    }
+
+    public void removeSeats(Set<Seat> seats) {
+        this.seats.removeAll(seats);
+        preUpdate();
     }
 }

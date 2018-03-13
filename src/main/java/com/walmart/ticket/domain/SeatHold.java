@@ -22,7 +22,7 @@ public class SeatHold extends BaseEntity implements Serializable {
     @Column(name = "NUMBER_OF_SEATS", nullable = false)
     private int numberOfSeats;
 
-    @OneToMany(mappedBy = "seatHold", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "seatHold", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Seat> seats;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -175,5 +175,10 @@ public class SeatHold extends BaseEntity implements Serializable {
 
     public Optional<String> getBookingCode() {
         return getBooking().map(Booking::getBookingCode);
+    }
+
+    public void removeSeats() {
+        venue.removeSeats(seats);
+        seats.clear();
     }
 }
