@@ -1,15 +1,15 @@
 package com.walmart.ticket.dto;
 
 
-public class SeatReserveRequest {
-    private String seatHoldId;
+public class SeatReserveDTO {
+    private Long seatHoldId;
     private String customerEmail;
 
-    public String getSeatHoldId() {
+    public Long getSeatHoldId() {
         return seatHoldId;
     }
 
-    public void setSeatHoldId(String seatHoldId) {
+    public void setSeatHoldId(Long seatHoldId) {
         this.seatHoldId = seatHoldId;
     }
 

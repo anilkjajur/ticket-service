@@ -4,7 +4,7 @@ package com.walmart.ticket.dto;
 import java.time.Instant;
 import java.util.Set;
 
-public class SeatHoldResponse {
+public class SeatHoldDTO {
 
     private Long seatHoldId;
     private String customerEmail;

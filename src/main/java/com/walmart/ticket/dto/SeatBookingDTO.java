@@ -1,10 +1,10 @@
 package com.walmart.ticket.dto;
 
 
-public class SeatReserveResponse {
+public class SeatBookingDTO {
     private String bookingCode;
 
-    public SeatReserveResponse(String bookingCode) {
+    public SeatBookingDTO(String bookingCode) {
         this.bookingCode = bookingCode;
     }
 

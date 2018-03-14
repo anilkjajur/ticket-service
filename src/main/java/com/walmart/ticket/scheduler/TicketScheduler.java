@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,14 +24,13 @@ public class TicketScheduler {
     SeatRepository seatRepository;
 
     /**
-     *  Execute the ticket scheduler task for every 30 seconds
+     *  Execute the ticket scheduler task for every 5 seconds
      */
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 5000)
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
     public void removeExpiredSeatsOnHold() {
-        List<SeatHold> holds = seatHoldRepository.findAll();
 
-        Set<SeatHold> expiredHolds = holds.stream()
+        Set<SeatHold> expiredHolds = seatHoldRepository.findAll().stream()
                 .filter(SeatHold::isOnHoldExpired)
                 .collect(Collectors.toSet());
 

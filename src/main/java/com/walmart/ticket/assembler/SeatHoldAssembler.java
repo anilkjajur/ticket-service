@@ -3,14 +3,14 @@ package com.walmart.ticket.assembler;
 import com.walmart.ticket.domain.Seat;
 import com.walmart.ticket.domain.SeatHold;
 import com.walmart.ticket.dto.SeatDTO;
-import com.walmart.ticket.dto.SeatHoldResponse;
+import com.walmart.ticket.dto.SeatHoldDTO;
 
 import java.util.stream.Collectors;
 
 public class SeatHoldAssembler {
 
-    public SeatHoldResponse mapToResponse(SeatHold seatHold) {
-        SeatHoldResponse response = new SeatHoldResponse();
+    public SeatHoldDTO mapToResponse(SeatHold seatHold) {
+        SeatHoldDTO response = new SeatHoldDTO();
         response.setSeatHoldId(seatHold.getId());
         response.setCustomerEmail(seatHold.getCustomerEmail());
         response.setHoldingTime(seatHold.getHoldingTime());
