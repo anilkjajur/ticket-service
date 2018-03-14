@@ -1,6 +1,7 @@
 package com.walmart.ticket.service;
 
 import com.walmart.ticket.domain.*;
+import com.walmart.ticket.exception.SeatHoldNotFoundException;
 import com.walmart.ticket.repository.CustomerRepository;
 import com.walmart.ticket.repository.SeatHoldRepository;
 import com.walmart.ticket.repository.SeatRepository;
@@ -37,12 +38,19 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public SeatHold findAndHoldSeats(int numSeats, String customerEmail) {
+        if (numSeats <= 0) {
+            throw new IllegalArgumentException("Invalid number of seats to hold: " + numSeats + "; cannot be zero or less than zero");
+        }
+
         Venue venue = getVenueByID();
 
         int availableSeats = venue.getAvailableSeats();
 
-        if (availableSeats <= 0 || availableSeats < numSeats) {
-            throw new IllegalStateException("Not enough seats are makeAvailable for holding seats: " + numSeats);
+        if ( availableSeats <= 0 ) {
+            throw new IllegalArgumentException("No seats are available in the venue");
+        }
+        else if (availableSeats < numSeats) {
+            throw new IllegalArgumentException("Not enough seats are available in venue for holding seats: " + numSeats);
         }
 
         Customer customer = getOrCreateCustomerForCustomerEmail(customerEmail);
@@ -64,14 +72,14 @@ public class TicketServiceImpl implements TicketService {
 
     private Venue getVenueByID() {
         return venueRepository.findById(1L)
-                .orElseThrow(() -> new IllegalStateException("Venue is not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Venue is not found"));
     }
 
     @Override
     public String reserveSeats(Long seatHoldId, String customerEmail) {
 
         SeatHold seatHold = seatHoldRepository.findById(seatHoldId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid seatHoldId: " + seatHoldId));
+                .orElseThrow(() -> new SeatHoldNotFoundException(seatHoldId, "seatHoldId is not found"));
 
         seatHold.validateCustomerEmail(customerEmail);
         seatHold.validateBooking();

@@ -10,7 +10,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
 ---
 1. Users are provided seats based on the availability.
 2. Seat numbers, Holding Time and Expiration Time.
-3. Hold time for the seats is 60 seconds. If the user doesn't reserve the seats before 60 seconds, then the holds are removed and user has to send a request again to hold the seats.
+3. Holding time for the seats is 60 seconds. If the user does not reserve the seats before 60 seconds, then the holds are removed and user has to send a request again to hold the seats.
 4. User can hold and reserve the seats based on hold id and customer email.
 
 ### Building Project
@@ -19,6 +19,12 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
 	
         ```
         git clone https://github.com/anilkjajur/ticket-service.git
+        ```
+	
+2.	Install Postgres Database and default postgres user to public DB connection
+	
+        ```
+        psql -U postgres -h localhost
         ```
 	
 2.	Kindly make sure JAVA_HOME environment variable is configured and maven bin directory is added to PATH environment variable.
@@ -49,7 +55,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
 		```
 		GET - http://localhost:8080/swagger-ui.html
 		```
-	    ![swaggerUi](https://github.com/anilkjajur/ticket-service/blob/master/img/Spring-Boot-Ticket-Service-Rest-API.png)
+	    ![swaggerUi](https://github.com/anilkjajur/ticket-service/blob/master/images/Spring-Boot-Ticket-Service-Rest-API.png)
 
 ### RESTful Web Services
 ---
@@ -79,7 +85,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         }
         ```
 				
-		![numSeatsAvailable](https://github.com/anilkjajur/ticket-service/blob/master/img/ticket-service-all-available-seats.png)
+		![numSeatsAvailable](https://github.com/anilkjajur/ticket-service/blob/master/images/ticket-service-all-available-seats.png)
 
 2.	Find and hold the best available seats on behalf of a customer, potentially limited to specific levels
 	Note: each ticket hold should expire within a set number of seconds.
@@ -113,7 +119,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         }
         ```
 	
-	    ![holdSeats](https://github.com/anilkjajur/ticket-service/blob/master/img/ticket-service-seat-hold-for-customer-email.png)
+	    ![holdSeats](https://github.com/anilkjajur/ticket-service/blob/master/images/ticket-service-seat-hold-for-customer-email.png)
 	
 	    This request will expire after 60 seconds. Before that, user has to reserve the seats using the web service in the following request.
 	
@@ -138,7 +144,11 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         }
         ```
         
-        ![reserveSeats](https://github.com/anilkjajur/ticket-service/blob/master/img/ticket-service-reserve-holded-id-email.png)
+        ![reserveSeats](https://github.com/anilkjajur/ticket-service/blob/master/images/ticket-service-reserve-holded-id-email.png)
     
     
+ ### DB Data Model
+ ---
+ The application is designed using PostgreSQL DB and DBVisualizer for data model diagram.
  
+ ![schemaDesign](https://github.com/vamshins/ticket-service/blob/master/imges/ticket-db-data-model.png)

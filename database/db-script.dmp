@@ -1,0 +1,364 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.3
+-- Dumped by pg_dump version 10.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: DATABASE postgres; Type: COMMENT; Schema: -; Owner: aj06
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: booking; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.booking (
+    id bigint NOT NULL,
+    booking_code character varying(500) NOT NULL,
+    booking_price numeric(8,2),
+    booking_time timestamp without time zone NOT NULL,
+    number_of_seats integer NOT NULL
+);
+
+
+ALTER TABLE public.booking OWNER TO postgres;
+
+--
+-- Name: booking_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.booking_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.booking_id_seq OWNER TO postgres;
+
+--
+-- Name: booking_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.booking_id_seq OWNED BY public.booking.id;
+
+
+--
+-- Name: customer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.customer (
+    id bigint NOT NULL,
+    customer_email character varying(100) NOT NULL,
+    first_name character varying(50),
+    last_name character varying(50)
+);
+
+
+ALTER TABLE public.customer OWNER TO postgres;
+
+--
+-- Name: customer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.customer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.customer_id_seq OWNER TO postgres;
+
+--
+-- Name: customer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.customer_id_seq OWNED BY public.customer.id;
+
+
+--
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
+--
+-- Name: seat; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.seat (
+    id bigint NOT NULL,
+    price numeric(8,2),
+    seat_code character varying(500) NOT NULL,
+    status character varying(50) NOT NULL,
+    seat_hold_id bigint NOT NULL,
+    venue_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.seat OWNER TO postgres;
+
+--
+-- Name: seat_hold; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.seat_hold (
+    id bigint NOT NULL,
+    holding_time timestamp without time zone,
+    number_of_seats integer NOT NULL,
+    booking_id bigint,
+    customer_id bigint NOT NULL,
+    venue_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.seat_hold OWNER TO postgres;
+
+--
+-- Name: seat_hold_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seat_hold_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.seat_hold_id_seq OWNER TO postgres;
+
+--
+-- Name: seat_hold_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seat_hold_id_seq OWNED BY public.seat_hold.id;
+
+
+--
+-- Name: seat_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seat_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.seat_id_seq OWNER TO postgres;
+
+--
+-- Name: seat_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seat_id_seq OWNED BY public.seat.id;
+
+
+--
+-- Name: venue; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.venue (
+    id bigint NOT NULL,
+    on_hold_seats integer NOT NULL,
+    remaining_seats integer NOT NULL,
+    reserved_seats integer NOT NULL,
+    total_seats integer NOT NULL
+);
+
+
+ALTER TABLE public.venue OWNER TO postgres;
+
+--
+-- Name: venue_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.venue_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.venue_id_seq OWNER TO postgres;
+
+--
+-- Name: venue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.venue_id_seq OWNED BY public.venue.id;
+
+
+--
+-- Name: booking id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.booking ALTER COLUMN id SET DEFAULT nextval('public.booking_id_seq'::regclass);
+
+
+--
+-- Name: customer id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer ALTER COLUMN id SET DEFAULT nextval('public.customer_id_seq'::regclass);
+
+
+--
+-- Name: seat id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat ALTER COLUMN id SET DEFAULT nextval('public.seat_id_seq'::regclass);
+
+
+--
+-- Name: seat_hold id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat_hold ALTER COLUMN id SET DEFAULT nextval('public.seat_hold_id_seq'::regclass);
+
+
+--
+-- Name: venue id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.venue ALTER COLUMN id SET DEFAULT nextval('public.venue_id_seq'::regclass);
+
+
+--
+-- Name: booking booking_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.booking
+    ADD CONSTRAINT booking_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: customer customer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: seat_hold seat_hold_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat_hold
+    ADD CONSTRAINT seat_hold_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: seat seat_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat
+    ADD CONSTRAINT seat_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: customer uk_qy5hqprdvx8o3dcidcfmf17x4; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT uk_qy5hqprdvx8o3dcidcfmf17x4 UNIQUE (customer_email);
+
+
+--
+-- Name: venue venue_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.venue
+    ADD CONSTRAINT venue_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: seat_hold fk11j5xgohq9pamwutbxpsgqvbi; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat_hold
+    ADD CONSTRAINT fk11j5xgohq9pamwutbxpsgqvbi FOREIGN KEY (venue_id) REFERENCES public.venue(id);
+
+
+--
+-- Name: seat_hold fkc8q4xlhcnxk8geh4gebs6g5md; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat_hold
+    ADD CONSTRAINT fkc8q4xlhcnxk8geh4gebs6g5md FOREIGN KEY (customer_id) REFERENCES public.customer(id);
+
+
+--
+-- Name: seat_hold fki7uq9sg44lwspgbqh6h7ug28f; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat_hold
+    ADD CONSTRAINT fki7uq9sg44lwspgbqh6h7ug28f FOREIGN KEY (booking_id) REFERENCES public.booking(id);
+
+
+--
+-- Name: seat fkkt7mgkoowgxocqf3844m53i8q; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat
+    ADD CONSTRAINT fkkt7mgkoowgxocqf3844m53i8q FOREIGN KEY (venue_id) REFERENCES public.venue(id);
+
+
+--
+-- Name: seat fkoqdvv8yj5tff136040irlb8k7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seat
+    ADD CONSTRAINT fkoqdvv8yj5tff136040irlb8k7 FOREIGN KEY (seat_hold_id) REFERENCES public.seat_hold(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

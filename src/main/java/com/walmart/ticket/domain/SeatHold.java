@@ -1,5 +1,7 @@
 package com.walmart.ticket.domain;
 
+import com.walmart.ticket.exception.SeatHoldNotFoundException;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -110,7 +112,7 @@ public class SeatHold extends BaseEntity implements Serializable {
         int availableSeats = venue.getAvailableSeats();
 
         if (availableSeats < holdSeats) {
-            throw new IllegalStateException("Not enough seats are makeAvailable to hold seats " + holdSeats);
+            throw new IllegalArgumentException("Not enough seats are makeAvailable to hold seats " + holdSeats);
         }
 
         Set<Seat> seats = IntStream.range(0, holdSeats)
@@ -133,7 +135,11 @@ public class SeatHold extends BaseEntity implements Serializable {
 
     public boolean isOnHoldExpired() {
         Instant now = Instant.now().minusSeconds(EXPIRATION_SECONDS);
-        return now.isAfter(holdingTime);
+        return hasSeatsOnHold() && now.isAfter(holdingTime);
+    }
+
+    private boolean hasSeatsOnHold() {
+        return this.seats.stream().anyMatch(Seat::isOnHold);
     }
 
     public String getCustomerEmail() {
@@ -155,13 +161,13 @@ public class SeatHold extends BaseEntity implements Serializable {
 
     public void validateCustomerEmail(String customerEmail) {
         if (!customer.getCustomerEmail().equalsIgnoreCase(customerEmail)) {
-            throw new IllegalArgumentException("Customer email is not valid for seatHoldId: " + getId());
+            throw new SeatHoldNotFoundException(getId(), "Customer email is not valid for seatHoldId");
         }
     }
 
     public void validateBooking() {
         if (getBooking().isPresent()) {
-            throw new IllegalStateException("Seat hold id already booked by the customer");
+            throw new IllegalArgumentException("Seat hold id already booked by the customer");
         }
     }
 
