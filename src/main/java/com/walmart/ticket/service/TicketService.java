@@ -29,6 +29,6 @@ public interface TicketService {
      * @param customerEmail the email address of the customer to which the seat hold is assigned
      * @return a reservation confirmation code
      */
-    String reserveSeats(String seatHoldId, String customerEmail);
+    String reserveSeats(Long seatHoldId, String customerEmail);
 
 }

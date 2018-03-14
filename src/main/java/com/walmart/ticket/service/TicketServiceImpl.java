@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
@@ -71,9 +68,9 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public String reserveSeats(String seatHoldId, String customerEmail) {
+    public String reserveSeats(Long seatHoldId, String customerEmail) {
 
-        SeatHold seatHold = seatHoldRepository.findById(Long.valueOf(seatHoldId))
+        SeatHold seatHold = seatHoldRepository.findById(seatHoldId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid seatHoldId: " + seatHoldId));
 
         seatHold.validateCustomerEmail(customerEmail);
