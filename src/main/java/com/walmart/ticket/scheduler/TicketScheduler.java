@@ -36,7 +36,9 @@ public class TicketScheduler {
 
         expiredHolds.forEach(this::removeSeats);
 
-        seatHoldRepository.deleteAll(expiredHolds);
+        if (!expiredHolds.isEmpty()) {
+            seatHoldRepository.deleteAll(expiredHolds);
+        }
     }
 
     private void removeSeats(SeatHold seatHold) {
