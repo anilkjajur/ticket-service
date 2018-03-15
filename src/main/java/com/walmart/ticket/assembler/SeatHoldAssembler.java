@@ -5,6 +5,7 @@ import com.walmart.ticket.domain.SeatHold;
 import com.walmart.ticket.dto.SeatDTO;
 import com.walmart.ticket.dto.SeatHoldDTO;
 
+import java.math.RoundingMode;
 import java.util.stream.Collectors;
 
 public class SeatHoldAssembler {
@@ -13,6 +14,7 @@ public class SeatHoldAssembler {
         SeatHoldDTO response = new SeatHoldDTO();
         response.setSeatHoldId(seatHold.getId());
         response.setCustomerEmail(seatHold.getCustomerEmail());
+        response.setNumberOfSeats(seatHold.getNumberOfSeats());
         response.setHoldingTime(seatHold.getHoldingTime());
         response.setExpirationTime(seatHold.getExpirationTime());
         response.setSeats(seatHold.getSeats().stream()

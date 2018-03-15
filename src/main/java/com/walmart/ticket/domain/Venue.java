@@ -112,6 +112,7 @@ public class Venue extends BaseEntity implements Serializable {
     public static Venue newInstance(int totalSeats) {
         Venue domain = new Venue();
         domain.totalSeats = totalSeats;
+        domain.seats = new HashSet<>();
         return domain;
     }
 

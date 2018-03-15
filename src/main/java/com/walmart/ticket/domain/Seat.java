@@ -1,12 +1,12 @@
 package com.walmart.ticket.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.math.RoundingMode;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -17,6 +17,7 @@ public class Seat extends BaseEntity implements Serializable {
     @Column(name = "SEAT_CODE", length = 500, nullable = false, updatable = false)
     private String seatCode;
 
+    @Digits(integer=8, fraction=2)
     @Column(name = "PRICE", precision = 8, scale = 2)
     private BigDecimal price;
 

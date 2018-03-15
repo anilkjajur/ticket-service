@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class SeatDTO implements Serializable {
+
     private BigDecimal price;
     private Status status;
     private Long seatId;

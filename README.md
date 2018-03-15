@@ -27,7 +27,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         psql -U postgres -h localhost
         ```
 	
-2.	Kindly make sure JAVA_HOME environment variable is configured and maven bin directory is added to PATH environment variable.
+3.	Kindly make sure JAVA_HOME environment variable is configured and maven bin directory is added to PATH environment variable.
 	Run the following commands
 
         ```
@@ -50,7 +50,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         .... Started Application in 8.837 seconds (JVM running for 9.214)
         ```
 
-2.	Use browser for testing API using Swagger UI
+4.	Use browser for testing API using Swagger UI
 	
 		```
 		GET - http://localhost:8080/swagger-ui.html
@@ -71,17 +71,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         Response Body:
         ```
         {
-          "id": 1,
-          "customerEmail": "abx@xyz.com",
-          "seats": [
-            {
-              "price": 10,
-              "status": "ON_HOLD",
-              "seatId": 1
-            }
-          ],
-          "holdingTime": "2018-03-13T23:57:03.814Z",
-          "expirationTime": "2018-03-13T23:58:03.814Z"
+          "availableSeats": 500,
         }
         ```
 				
@@ -105,8 +95,9 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         Response Body:
         ```
         {
-          "id": 1,
+          "seatHoldId": 1,
           "customerEmail": "abx@xyz.com",
+          "numberOfSeats": 1,
           "seats": [
             {
               "price": 10,
@@ -133,7 +124,7 @@ This application is developed using Spring Boot, Spring JPA, Spring RESTful web 
         ```
         {
           "customerEmail": "x@test.com",
-          "seatHoldId": 1
+          "seatHoldId": "1"
         }
         ```
         

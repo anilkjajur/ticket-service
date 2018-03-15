@@ -24,7 +24,7 @@ public class Application {
 	}
 
 	@Bean
-	public CommandLineRunner demo(VenueRepository repository) {
+	public CommandLineRunner demoVenue(VenueRepository repository) {
 		return (args) -> {
 			// create the venue with 500 seats
 			Venue venue = repository.findAll()

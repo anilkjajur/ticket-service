@@ -105,6 +105,7 @@ public class SeatHold extends BaseEntity implements Serializable {
         domain.customer = customer;
         domain.numberOfSeats = holdSeats;
         domain.seats = createSeatsToHold(holdSeats, venue, domain);
+        domain.holdingTime = Instant.now();
         return domain;
     }
 

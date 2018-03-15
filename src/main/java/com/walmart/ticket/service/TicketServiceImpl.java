@@ -63,7 +63,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     private Customer getOrCreateCustomerForCustomerEmail(String customerEmail) {
-        Customer customer = customerRespository.findByCustomerEmail(customerEmail)
+        Customer customer = customerRespository.findByCustomerEmailIgnoreCase(customerEmail)
                 .orElse(new Customer(customerEmail));
 
         customerRespository.save(customer);
@@ -76,10 +76,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public String reserveSeats(Long seatHoldId, String customerEmail) {
+    public String reserveSeats(String seatHoldId, String customerEmail) {
 
-        SeatHold seatHold = seatHoldRepository.findById(seatHoldId)
-                .orElseThrow(() -> new SeatHoldNotFoundException(seatHoldId, "seatHoldId is not found"));
+        SeatHold seatHold = seatHoldRepository.findById(Long.valueOf(seatHoldId))
+                .orElseThrow(() -> new SeatHoldNotFoundException(Long.valueOf(seatHoldId), "seatHoldId is not found"));
 
         seatHold.validateCustomerEmail(customerEmail);
         seatHold.validateBooking();

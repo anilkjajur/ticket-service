@@ -1,7 +1,7 @@
 package com.walmart.ticket.dto;
 
 
-public class SeatHoldRequest {
+public class SeatHoldRequestDTO {
 
     private int numSeats;
     private String customerEmail;

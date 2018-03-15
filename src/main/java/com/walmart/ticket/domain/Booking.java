@@ -1,6 +1,7 @@
 package com.walmart.ticket.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
@@ -16,6 +17,7 @@ public class Booking extends BaseEntity {
     @Column(name = "NUMBER_OF_SEATS", nullable = false)
     private Integer numberOfSeats;
 
+    @Digits(integer=8, fraction=2)
     @Column(name = "BOOKING_PRICE", precision = 8, scale = 2)
     private BigDecimal bookingPrice;
 

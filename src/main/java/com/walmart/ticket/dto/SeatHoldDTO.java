@@ -2,12 +2,14 @@ package com.walmart.ticket.dto;
 
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 public class SeatHoldDTO {
 
     private Long seatHoldId;
     private String customerEmail;
+    private int numberOfSeats;
     private Set<SeatDTO> seats;
     private Instant holdingTime;
     private Instant expirationTime;
@@ -26,6 +28,14 @@ public class SeatHoldDTO {
 
     public String getCustomerEmail() {
         return customerEmail;
+    }
+
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
     }
 
     public Set<SeatDTO> getSeats() {
@@ -50,5 +60,12 @@ public class SeatHoldDTO {
 
     public Instant getExpirationTime() {
         return expirationTime;
+    }
+
+    public void addSeat(SeatDTO seatDTO) {
+        if (seats == null) {
+            seats = new HashSet<>();
+        }
+        seats.add(seatDTO);
     }
 }
