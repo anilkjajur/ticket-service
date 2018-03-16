@@ -1,7 +1,5 @@
 package com.walmart.ticket.domain;
 
-import com.walmart.ticket.exception.SeatHoldNotFoundException;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -162,7 +160,7 @@ public class SeatHold extends BaseEntity implements Serializable {
 
     public void validateCustomerEmail(String customerEmail) {
         if (!customer.getCustomerEmail().equalsIgnoreCase(customerEmail)) {
-            throw new SeatHoldNotFoundException(getId(), "Customer email is not valid for seatHoldId");
+            throw new IllegalArgumentException("Customer email is not valid for seatHoldId");
         }
     }
 

@@ -76,6 +76,7 @@ public class Booking extends BaseEntity {
         domain.numberOfSeats = seatHold.getNumberOfSeats();
         domain.bookingPrice = seatHold.getSeats().stream().map(Seat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        domain.bookingCode = UUID.randomUUID().toString();
         return domain;
     }
 
